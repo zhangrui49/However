@@ -1,0 +1,3 @@
+# However
+一个android上的UDP框架
+用法看例子就行，SyncCallback是同步回调，AsyncCallback在主线程回调，可以直接操作UI，用GSON写了一个JsonAsyncCallback,返回传递泛型
