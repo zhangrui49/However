@@ -51,7 +51,7 @@ public  class Request implements Runnable {
                 Looper.prepare();
             }
             socket.send(sendPacket);
-            socket.setSoTimeout(15000);
+            socket.setSoTimeout(However.DEFAULT_TIMEOUT);
             socket.receive(receivePacket);
             mCallback.sendMessage(MESSAGE_SUCCESS,receivePacket.getData());
         } catch (Exception e) {

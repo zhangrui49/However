@@ -11,10 +11,11 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 
 public final class However {
-    public static final String TAG="However";
-    public static String DEFAULT_IP = null;
-    public static int DEFAULT_PORT = -1;
-    public static int DEFAULT_COREPOOLSIZE = -1;
+    public static final String TAG = "However";
+    public static String DEFAULT_IP = "127.0.0.1";
+    public static int DEFAULT_PORT = 8080;
+    public static int DEFAULT_COREPOOLSIZE = Math.max(2, Math.min(Runtime.getRuntime().availableProcessors() - 1, 4));
+    public static int DEFAULT_TIMEOUT = 15000;
     private static ScheduledExecutorService sScheduleExecutor;
     private static volatile However sUdpClient;
     private static Gson sGson;
@@ -37,12 +38,12 @@ public final class However {
         sScheduleExecutor = Executors.newScheduledThreadPool(config.getCorePoolSize());
         DEFAULT_PORT = config.getPort();
         DEFAULT_IP = config.getIp();
+        DEFAULT_TIMEOUT = config.getTimeout();
     }
 
     public void newRequest(IRequest requestBody, Callback callback) {
         Request request = new Request(requestBody, callback);
         if (requestBody instanceof RequestBody) {
-
             sScheduleExecutor.execute(request);
         } else if (requestBody instanceof ScheduleRequestBody) {
             ScheduleRequestBody scheduleRequestBody = (ScheduleRequestBody) requestBody;
@@ -53,10 +54,9 @@ public final class However {
 
     }
 
-    public void newRequest(String ip,int port,IRequest requestBody, Callback callback) {
-        Request request = new Request(ip,port,requestBody, callback);
+    public void newRequest(String ip, int port, IRequest requestBody, Callback callback) {
+        Request request = new Request(ip, port, requestBody, callback);
         if (requestBody instanceof RequestBody) {
-
             sScheduleExecutor.execute(request);
         } else if (requestBody instanceof ScheduleRequestBody) {
             ScheduleRequestBody scheduleRequestBody = (ScheduleRequestBody) requestBody;
