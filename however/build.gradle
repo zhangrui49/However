@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.zhangrui49'
+apply plugin: 'com.novoda.bintray-release'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -17,10 +18,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.google.code.gson:gson:2.7'
+}
+
+//新添加
+publish {
+    repoName="Maven"
+    userOrg = 'zhangrui99' //在https://bintray.com上注册的用户名
+    groupId = 'com.zhangrui99' //jCenter上的路径
+    artifactId = 'However' //要上传的library名称（和二、4中的package相同）
+    publishVersion = '1.0.1' //library的版本号
+    desc = 'Android UDP lib' //library的简单描述
+    website = 'https://github.com/zhangrui49/However' //library的开源地址，例如在github上的地址
 }
