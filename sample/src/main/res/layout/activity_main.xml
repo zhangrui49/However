@@ -1,14 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:background="@drawable/bg"
         tools:context="com.zhangrui.sample.MainActivity">
 
     <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Hello World!"/>
+            android:padding="2dp"
+            android:text="UDP 调试助手"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:textColor="@android:color/holo_blue_bright"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"/>
 
-</RelativeLayout>
+    <EditText
+            android:layout_marginTop="10dp"
+            android:id="@+id/ip"
+            android:hint="请输入IP,以点号分割"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="172.17.161.1"/>
+
+    <EditText
+            android:id="@+id/port"
+            android:hint="请输入端口号"
+            android:text="8080"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"/>
+
+    <EditText
+            android:id="@+id/content"
+            android:hint="请输入请求报文"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"/>
+
+    <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.6">
+
+        <TextView
+                android:id="@+id/response"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+    </ScrollView>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <Button
+                android:id="@+id/request"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="3dp"
+                android:text="发送"/>
+
+        <Button
+                android:id="@+id/clear"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="3dp"
+                android:text="清空"/>
+
+        <CheckBox
+                android:id="@+id/isLoop"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:checked="false"
+                android:text="定时发送"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/layout_period"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="invisible">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="周期:"/>
+
+        <EditText
+                android:id="@+id/period"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5000"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:text="ms"/>
+
+        <Button
+                android:id="@+id/set_period"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="设置"
+                />
+
+        <Button
+                android:id="@+id/stop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="停止"
+                />
+    </LinearLayout>
+</LinearLayout>

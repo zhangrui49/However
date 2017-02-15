@@ -5,6 +5,7 @@ import android.os.Looper;
 import android.os.Message;
 
 import static com.zhangrui.however.Request.MESSAGE_FAILURE;
+import static com.zhangrui.however.Request.MESSAGE_SEND;
 import static com.zhangrui.however.Request.MESSAGE_SUCCESS;
 
 /**
@@ -12,12 +13,12 @@ import static com.zhangrui.however.Request.MESSAGE_SUCCESS;
  * Created by zhangrui on 2017/1/17.
  */
 
-public abstract class AsyncCallback extends Callback{
+public abstract class AsyncCallback extends Callback {
 
     private Handler mHandler;
 
     public AsyncCallback() {
-        mHandler = new InternalHandler(this,Looper.myLooper());
+        mHandler = new InternalHandler(this, Looper.myLooper());
     }
 
     private static class InternalHandler extends Handler {
@@ -41,17 +42,20 @@ public abstract class AsyncCallback extends Callback{
         switch (message.what) {
             case MESSAGE_SUCCESS:
 
-                onSuccess((byte[])message.obj);
+                onSuccess((byte[]) message.obj);
                 break;
             case MESSAGE_FAILURE:
                 onFailure(new Error("ERROR"));
+                break;
+            case MESSAGE_SEND:
+                onSend((byte[]) message.obj);
                 break;
         }
     }
 
     @Override
     public void sendMessage(int what, Object object) {
-        mHandler.obtainMessage(what,object).sendToTarget();
+        mHandler.obtainMessage(what, object).sendToTarget();
     }
 
 }

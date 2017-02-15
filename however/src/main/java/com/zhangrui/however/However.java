@@ -19,6 +19,8 @@ public final class However {
     private static ScheduledExecutorService sScheduleExecutor;
     private static volatile However sUdpClient;
     private static Gson sGson;
+    private Request sRequest;
+    private ScheduleRequest sScheduleRequest;
 
     public static However getInstance() {
         if (sUdpClient == null) {
@@ -35,21 +37,42 @@ public final class However {
     }
 
     public void init(InitConfig config) {
+        stop();
         sScheduleExecutor = Executors.newScheduledThreadPool(config.getCorePoolSize());
         DEFAULT_PORT = config.getPort();
         DEFAULT_IP = config.getIp();
         DEFAULT_TIMEOUT = config.getTimeout();
+        sRequest = null;
+        sScheduleRequest = null;
     }
 
     public void newRequest(IRequest requestBody, Callback callback) {
-        Request request = new Request(requestBody, callback);
-        if (requestBody instanceof RequestBody) {
-            sScheduleExecutor.execute(request);
-        } else if (requestBody instanceof ScheduleRequestBody) {
-            ScheduleRequestBody scheduleRequestBody = (ScheduleRequestBody) requestBody;
-            sScheduleExecutor.scheduleAtFixedRate(request, scheduleRequestBody.getDelayed(), scheduleRequestBody.getPeriod(), scheduleRequestBody.getTimeUnit());
+        if (sRequest == null) {
+            sRequest = new Request(requestBody, callback);
+            sScheduleExecutor.execute(sRequest);
         } else {
-            sScheduleExecutor.execute(request);
+            sRequest.setData(requestBody.getBody());
+            sScheduleExecutor.execute(sRequest);
+        }
+
+//        Request request = new Request(requestBody, callback);
+//        if (requestBody instanceof RequestBody) {
+//            sScheduleExecutor.execute(request);
+//        } else if (requestBody instanceof ScheduleRequestBody) {
+//            ScheduleRequestBody scheduleRequestBody = (ScheduleRequestBody) requestBody;
+//            sScheduleExecutor.scheduleAtFixedRate(request, scheduleRequestBody.getDelayed(), scheduleRequestBody.getPeriod(), scheduleRequestBody.getTimeUnit());
+//        } else {
+//            sScheduleExecutor.execute(request);
+//        }
+    }
+
+    public void newScheduleRequest(ScheduleRequestBody requestBody, Callback callback) {
+        if (sScheduleRequest == null) {
+            sScheduleRequest = new ScheduleRequest(requestBody, callback);
+            sScheduleExecutor.scheduleAtFixedRate(sScheduleRequest, requestBody.getDelayed(), requestBody.getPeriod(), requestBody.getTimeUnit());
+        } else {
+            sScheduleRequest.setData(requestBody.getBody());
+            sScheduleExecutor.scheduleAtFixedRate(sScheduleRequest, requestBody.getDelayed(), requestBody.getPeriod(), requestBody.getTimeUnit());
         }
 
     }
@@ -64,10 +87,11 @@ public final class However {
         } else {
             sScheduleExecutor.execute(request);
         }
-
     }
 
-    public void close() {
-        sScheduleExecutor.shutdownNow();
+    public void stop() {
+        if (sScheduleExecutor != null) {
+            sScheduleExecutor.shutdownNow();
+        }
     }
 }

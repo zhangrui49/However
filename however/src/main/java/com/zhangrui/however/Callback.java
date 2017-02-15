@@ -11,5 +11,8 @@ public abstract class Callback {
 
     public abstract void onFailure(Error error);
 
+    public abstract void onSend(byte[] t);
+
+
     public abstract void sendMessage(int what, Object object);
 }
