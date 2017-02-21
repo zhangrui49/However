@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 needInit = true;
-                Log.e("s",s.toString());
+                Log.e("s", s.toString());
                 However.getInstance().init(new InitConfig.Builder().CorePoolSize(5).Ip(mIp.getText().toString()).Port(Integer.parseInt(mPort.getText().toString())).build());
             }
         });
@@ -182,13 +182,23 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(byte[] t) {
                             mResponse.append("receive: " + new String(t) + "\n" + "\n");
-                            mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                            mScrollView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                                }
+                            });
                         }
 
                         @Override
                         public void onSend(byte[] t) {
                             mResponse.append("send: " + new String(t) + "\n" + "\n");
-                            mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                            mScrollView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                                }
+                            });
                         }
 
                         @Override
@@ -213,7 +223,12 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSend(byte[] t) {
                             mResponse.append("send: " + new String(t) + "\n" + "\n");
-                            mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                            mScrollView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                                }
+                            });
                         }
 
                         @Override
